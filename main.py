@@ -30,12 +30,3 @@ def run_test(num_threads: int):
 if __name__ == "__main__":
     #main('http://10.1.1.28:1015/itss-agro/', 'cciliato', 'Alvorada@1234', 'username', 'password')
     run_test(3)
-
-
-
-    
-
-
-
-    # Example usage:
-    # run_test(5)  # Will run 5 concurrent instances of the main function
