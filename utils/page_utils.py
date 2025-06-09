@@ -45,7 +45,6 @@ def locate_element_by_text(text, page: Page) -> Locator:
 def locate_element_by_xpath(xpath, page: Page) -> Locator:
     return page.locator(xpath)
 
-
 def click_element_by_id(element_id: str, page: Page):
     element = locate_element_by_id(element_id, page)
     element.click()
