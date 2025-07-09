@@ -44,7 +44,7 @@ def set_motorista(page: Page, cod_motorista: str, data_label: str):
     fill_input_by_id('motorista_700_input', cod_motorista, page)
     simulate_key_press(page, 'Space')
     wait_for_element_by_id('motorista_700_panel', page)
-    click_first_row_by_table_label('3002222 - RONI LUCAS CICHELERO', page)
+    click_first_row_by_table_label(data_label, page)
     page.wait_for_selector('div.ui-dialog[widgetvar="statusDialog"]', state='hidden')
 
 def set_veiculo(page: Page, cod_veiculo: str, data_label: str, reboque: str):

@@ -1,23 +1,8 @@
-from utils.page_utils import navigate_to_page, login_to_site, click_element_by_id, select_and_click_li_from_ul, wait_for_page_load
+from utils.page_utils import navigate_to_page, fill_login_fields, click_element_by_id, select_and_click_li_from_ul, wait_for_page_load
 from playwright.sync_api import Page
 import time
 
-def start_new_romaneio(url: str, username: str, password: str, username_id: str, password_id: str, page: Page, operacao: str):
-        
-        start_time = time.time()
-        nav_start = time.time()
-
-        navigate_to_page(url, page)
-        nav_end = time.time()
-
-        print(f"Carregando a tela de login: {nav_end - nav_start:.2f} seconds")
-        
-        login_start = time.time()
-        login_to_site(username, password, username_id, password_id, page)
-        login_end = time.time()
-
-        print(f"tempo de login: {login_end - login_start:.2f} seconds")
-        
+def start_new_romaneio(url: str, username: str, password: str, username_id: str, password_id: str, page: Page, operacao: str):        
         romaneio_start = time.time()
         navigate_to_page('http://10.1.1.28:1015/itss-agro/paginas/romaneio/inicial.jsf', page)
         romaneio_end = time.time()
@@ -34,3 +19,20 @@ def start_new_romaneio(url: str, username: str, password: str, username_id: str,
         
         end_time = time.time()
         print(f"Tempo Total: {end_time - start_time:.2f} seconds")
+
+
+def login_to_site(url: str, username: str, password: str, username_id: str, password_id: str, page: Page):
+                
+        start_time = time.time()
+        nav_start = time.time()
+
+        navigate_to_page(url, page)
+        nav_end = time.time()
+
+        print(f"Carregando a tela de login: {nav_end - nav_start:.2f} seconds")
+        
+        login_start = time.time()
+        fill_login_fields(username, password, username_id, password_id, page)
+        login_end = time.time()
+
+        print(f"tempo de login: {login_end - login_start:.2f} seconds")

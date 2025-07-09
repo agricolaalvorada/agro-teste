@@ -1,0 +1,45 @@
+[
+    {
+        
+        "url": "http://10.1.1.28:1015/itss-agro/",
+        "login": {
+            "username": "cciliato",
+            "password": "Alvorada@1234",
+            "username_id": "username",
+            "password_id": "password"
+        },
+        "romaneio": [
+            {
+                "safra": "2025",
+                "safra_data_label": "24/25-SAFRA",
+                "safra_input_id": "safra_700_input",
+                "parceiro": "3000011",
+                "parceiro_data_label": "3000011 - TIAGO BOTTON",
+                "parceiro_input_id": "j_idt3091_input",
+                "parceiro_ul_id": "j_idt3091_panel",
+                "material": "material_700",
+                "material_data_label": "100000 - SOJA EM GRAOS",
+                "material_ul_id": "material_700_items",
+                "motorista": "3002222",
+                "motorista_data_label": "3002222 - RONI LUCAS CICHELERO",
+                "motorista_input_id": "motorista_700_input",
+                "motorista_ul_id": "motorista_700_panel",
+                "veiculo": "LEO0722",
+                "veiculo_data_label": "LEO0722 - LEO0722",
+                "veiculo_input_id": "campoPlacaCavalo_700_input",
+                "veiculo_ul_id": "campoPlacaCavalo_700_panel",
+                "reboque": "LEO0723",
+                "reboque_input_id": "campoPlacaUm700_input",
+                "deposito": "deposito_700",
+                "deposito_input_id": "deposito_700",
+                "deposito_data_label": "01 - GrãoTransgênico",
+                "deposito_ul_id": "deposito_700_items",
+                "depositante_copy_id": "j_idt3199",
+                "btn_salvar_id": "j_idt26494",
+                "operacao": "700 - Entrada Spot"
+            }
+            
+        ],
+        "threads": 3
+    }
+]

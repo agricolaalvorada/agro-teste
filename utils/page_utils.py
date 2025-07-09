@@ -32,7 +32,7 @@ def wait_for_element_by_id(element_id: str, page: Page):
     print('element found')
 
 
-def login_to_site(username, password, username_id, password_id, page: Page):
+def fill_login_fields(username, password, username_id, password_id, page: Page):
     fill_input_by_id(username_id, username, page)
     fill_input_by_id(password_id, password, page)
     entrar_span = locate_element_by_text('Entrar', page)

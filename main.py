@@ -1,6 +1,6 @@
 from playwright.sync_api import sync_playwright
 from utils.page_utils import *
-from routines.starter_routines import start_new_romaneio
+from routines.starter_routines import start_new_romaneio, login_to_site
 from routines.operacao_700.preencher_romaneio import criar_romaneio
 import time
 import threading
@@ -10,9 +10,9 @@ def main(url, username, password, username_id, password_id):
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False)
         page = browser.new_page()
+        login_to_site(url, username, password, username_id, password_id, page)
         start_new_romaneio(url, username, password, username_id, password_id, page, '700 - Entrada Spot')
-        criar_romaneio(page)
-        print('Teste finalizado')
+        criar_romaneio(page) 
         browser.close()
 
 def run_test(num_threads: int):
