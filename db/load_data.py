@@ -97,4 +97,4 @@ def load_json_from_db(login_id: int, routine_ids: list[int]) -> dict:
         cursor.close()
         conn.close()
 
-print(load_json_from_db(1, [1]))
+# print(load_json_from_db(1, [1,2,3])[0].get('romaneio'))

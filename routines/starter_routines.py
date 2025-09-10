@@ -18,7 +18,7 @@ def start_new_romaneio(url: str, username: str, password: str, username_id: str,
         print(f"Abrir Tela de Operação: {button_end - button_start:.2f} seconds")
         
         end_time = time.time()
-        print(f"Tempo Total: {end_time - start_time:.2f} seconds")
+        print(f"Tempo Total: {romaneio_end - romaneio_start:.2f} seconds")
 
 
 def login_to_site(url: str, username: str, password: str, username_id: str, password_id: str, page: Page):
