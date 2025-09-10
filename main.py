@@ -2,6 +2,7 @@ from playwright.sync_api import sync_playwright
 from utils.page_utils import *
 from routines.starter_routines import start_new_romaneio, login_to_site
 from routines.operacao_700.preencher_romaneio import criar_romaneio as criar_romaneio_700
+from routines.operacao_405.preencher_romaneio import criar_romaneio as criar_romaneio_405
 import time
 import threading
 import argparse
@@ -13,17 +14,19 @@ def main(data, romaneio):
         page = browser.new_page()
         login_to_site(data[0]['url'], data[0]['login']['username'], data[0]['login']['password'], data[0]['login']['username_id'], data[0]['login']['password_id'], page)
         
-        start_new_romaneio(data[0]['url'], data[0]['login']['username'], data[0]['login']['password'], data[0]['login']['username_id'], data[0]['login']['password_id'], page, romaneio['operacao'])
-        match (romaneio['operacao']):
+        start_new_romaneio(data[0]['url'], data[0]['login']['username'], data[0]['login']['password'], data[0]['login']['username_id'], data[0]['login']['password_id'], page, data[0]['operacao'])
+        match (data[0]['operacao']):
             case '700 - Entrada Spot':
                 criar_romaneio_700(page, romaneio)
+            case '001 - VENDAS':
+                criar_romaneio_405(page, romaneio)
             case _:
-                raise ValueError(f"Operação {romaneio['operacao']} não suportada")
+                raise ValueError(f"Operação {data[0]['operacao']} não suportada")
         browser.close()
 
 def run_test(num_threads: int):
     threads = []
-    data = load_json_from_db(1, [1, 2, 3])
+    data = load_json_from_db(1, [2])
     for romaneio in data[0]['romaneio']:
         thread = threading.Thread(
             target=main,
