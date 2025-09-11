@@ -47,6 +47,8 @@ def load_json_from_db(login_id: int, routine_ids: list[int]) -> dict:
                 data.append(query_romaneio_data_op_700(routine, cursor, conn, login))
             elif routine['operacao'] == '001 - VENDAS':
                 data.append(query_romaneio_data_op_405(routine, cursor, conn, login))
+            elif routine['operacao'] == '302 - EM - Compras p/ Pedido':
+                data.append(query_romaneio_data_op_302(routine, cursor, conn, login))
             else:
                 raise ValueError(f"Operação {routine['operacao']} não suportada")
         return data
@@ -109,8 +111,8 @@ def query_romaneio_data_op_405(routine_dict: dict, cursor: sqlite3.Cursor, conn:
     cursor.execute("""
         SELECT motorista, motorista_data_label, motorista_input_id, motorista_ul_id,
                 veiculo, veiculo_data_label, veiculo_input_id, veiculo_ul_id, reboque, reboque_input_id,
-                btn_salvar_id, nr_ordem_venda, ordem_venda_input_id, btn_incluir_ordem_venda,
-                transportadora, transportadora_data_label, transportadora_input_id, transportadora_ul_id
+                btn_salvar_id, nr_ordem_venda, ordem_venda_input_id, btn_incluir_ordem_venda, 
+                transportadora, transportadora_data_label, transportadora_input_id, transportadora_ul_id, btn_incluir_item_nf_pedido
     FROM romaneio_data
     WHERE id = ?
     ORDER BY id ASC
@@ -136,7 +138,8 @@ def query_romaneio_data_op_405(routine_dict: dict, cursor: sqlite3.Cursor, conn:
             "transportadora": row[14],
             "transportadora_data_label": row[15],
             "transportadora_input_id": row[16],
-            "transportadora_ul_id": row[17]
+            "transportadora_ul_id": row[17],
+            "btn_incluir_item_nf_pedido": row[18]
         })
     
     result_dict = {
@@ -146,6 +149,53 @@ def query_romaneio_data_op_405(routine_dict: dict, cursor: sqlite3.Cursor, conn:
     }
     return result_dict
 
+def query_romaneio_data_op_302(routine_dict: dict, cursor: sqlite3.Cursor, conn: sqlite3.Connection, login: dict) -> dict:
+    cursor.execute("""
+        SELECT motorista, motorista_data_label, motorista_input_id, motorista_ul_id,
+                veiculo, veiculo_data_label, veiculo_input_id, veiculo_ul_id, reboque, reboque_input_id,
+                btn_salvar_id, nr_nota_fiscal, nota_fiscal_input_id, nr_pedido, pedido_input_id
+                transportadora, transportadora_data_label, transportadora_input_id, transportadora_ul_id, btn_incluir_item_nf_pedido
+    FROM romaneio_data
+    WHERE id = ?
+    ORDER BY id ASC
+    """, (routine_dict['romaneio_data_id'],))
+    romaneio_rows = cursor.fetchall()
+    romaneio = []
+    for row in romaneio_rows:
+        romaneio.append({
+            "motorista": row[0],
+            "motorista_data_label": row[1],
+            "motorista_input_id": row[2],
+            "motorista_ul_id": row[3],
+            "veiculo": row[4],
+            "veiculo_data_label": row[5],
+            "veiculo_input_id": row[6],
+            "veiculo_ul_id": row[7],
+            "reboque": row[8],
+            "reboque_input_id": row[9],
+            "btn_salvar_id": row[10],
+            "nr_nota_fiscal": row[11],
+            "nota_fiscal_input_id": row[12],
+            "nr_pedido": row[13],
+            "pedido_input_id": row[14],
+            "transportadora": row[15],
+            "transportadora_data_label": row[16],
+            "transportadora_input_id": row[17],
+            "transportadora_ul_id": row[18],
+            "btn_incluir_item_nf_pedido": row[19]
+        })
+            "transportadora": row[14],
+            "transportadora_data_label": row[15],
+            "transportadora_input_id": row[16],
+            "transportadora_ul_id": row[17],
+            "btn_incluir_item_nf_pedido": row[18]
+        })
+    
+    result_dict = {
+        "url": routine_dict['url'],
+        "login": login,
+        "romaneio": romaneio
+    }
+    return result_dict
 
-
-print(load_json_from_db(1, [1,2]))
+#print(load_json_from_db(1, [1,2]))

@@ -27,6 +27,8 @@ def main(data, romaneio):
 def run_test(num_threads: int):
     threads = []
     data = load_json_from_db(1, [2])
+    print(data)
+    input("debug")
     for romaneio in data[0]['romaneio']:
         thread = threading.Thread(
             target=main,

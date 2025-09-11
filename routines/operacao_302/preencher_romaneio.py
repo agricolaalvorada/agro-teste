@@ -6,22 +6,34 @@ import time
 
 def criar_romaneio(page: Page, romaneio: dict):
 
-        set_ordem(page, romaneio)
+        set_nota_fiscal(page, romaneio)
+        wait_for_page_load(page)
+        set_pedido(page, romaneio)
         wait_for_page_load(page)
         set_motorista(page, romaneio)
         set_veiculo(page, romaneio)
         set_transportadora(page, romaneio)
         wait_for_page_load(page)
+        wait_for_element_by_id(romaneio['depositante_copy_id'], page) # copiar deposittante
+        click_element_by_id(romaneio['depositante_copy_id'], page) # copiar deposittante
         click_element_by_id(romaneio['btn_incluir_item_nf_pedido'], page)
         wait_for_page_load(page)
         click_element_by_id(romaneio['btn_salvar_id'], page)  # salvar
+        wait_for_page_load(page)
 
 
-def set_ordem(page: Page, romaneio: dict):
-    print('Preenchendo ordem')
-    print(f'{romaneio["nr_ordem_venda"]} {romaneio["ordem_venda_input_id"]}')
-    fill_input_by_id(romaneio['ordem_venda_input_id'], str(romaneio['nr_ordem_venda']), page)
-    click_element_by_id(romaneio['btn_incluir_ordem_venda'], page)
+def set_nota_fiscal(page: Page, romaneio: dict):
+    print('Preenchendo nota fiscal')
+    print(f'{romaneio["nr_nota_fiscal"]} {romaneio["nota_fiscal_input_id"]}')
+    fill_input_by_id(romaneio['nota_fiscal_input_id'], str(romaneio['nr_nota_fiscal']), page)
+    wait_for_page_load(page)
+
+
+def set_pedido(page: Page, romaneio: dict):
+    print('Preenchendo pedido')
+    print(f'{romaneio["nr_pedido"]} {romaneio["pedido_input_id"]}')
+    fill_input_by_id(romaneio['pedido_input_id'], str(romaneio['nr_pedido']), page)
+    wait_for_page_load(page)
 
 
 def set_transportadora (page: Page, romaneio: dict):
