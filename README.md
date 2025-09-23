@@ -2,11 +2,11 @@
 
 ## Descrição
 
-Este projeto automatiza o processo de preenchimento e envio de formulários de operações agrícolas ("romaneio") em um sistema web utilizando o Playwright para automação de navegador. Ele suporta múltiplos tipos de operação (ex: 700 - Entrada Spot, 001 - VENDAS) e pode rodar múltiplas threads para testes de estresse e medição de performance. O projeto foi desenvolvido para automação robusta, repetível e baseada em dados.
+Este projeto automatiza o processo de preenchimento e envio de romaneios utilizando o Playwright para automação de navegador. Ele suporta múltiplos tipos de operação (ex: 700 - Entrada Spot, 001 - VENDAS) e pode rodar múltiplas threads para testes de estresse e medição de performance. O projeto foi desenvolvido para automação robusta, repetível e baseada em dados.
 
 ## Funcionalidades
 
-- Login automatizado e navegação no sistema web agrícola
+- Login automatizado
 - Preenchimento automático de formulários para diferentes tipos de operação (ex: Entrada Spot, Vendas)
 - Baseado em dados: lê informações de operação e login de arquivos JSON ou banco SQLite
 - Execução multi-thread para testes de estresse
