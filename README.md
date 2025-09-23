@@ -36,7 +36,7 @@ Este projeto automatiza o processo de preenchimento e envio de romaneios utiliza
 3. **Instale as dependências:**
    ```bash
    pip install playwright
-   pip install -r requirements.txt  # (se presente)
+   pip install -r requirements.txt
    playwright install  # Instala os navegadores
    ```
 
