@@ -88,3 +88,8 @@ python main.py
 ## Licença
 
 Este projeto está licenciado sob a Licença MIT.
+
+## Roadmap
+
+- [ ] Adicionar um endpoint (API) que receba os dados descritos na seção "Prepare seus dados" e realize inserts no banco de dados.
+- [ ] Implementar persistência de métricas de execução utilizando o módulo `save_telemetry.py`.
