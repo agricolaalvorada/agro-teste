@@ -101,7 +101,8 @@ def query_romaneio_data_op_700(routine_dict: dict, cursor: sqlite3.Cursor, conn:
     result_dict = {
         "url": routine_dict['url'],
         "login": login,
-        "romaneio": romaneio
+        "romaneio": romaneio,
+        "operacao": routine_dict['operacao']
     }
 
     return result_dict
@@ -145,7 +146,8 @@ def query_romaneio_data_op_405(routine_dict: dict, cursor: sqlite3.Cursor, conn:
     result_dict = {
         "url": routine_dict['url'],
         "login": login,
-        "romaneio": romaneio
+        "romaneio": romaneio,
+        "operacao": routine_dict['operacao']
     }
     return result_dict
 
@@ -182,8 +184,7 @@ def query_romaneio_data_op_302(routine_dict: dict, cursor: sqlite3.Cursor, conn:
             "transportadora_data_label": row[16],
             "transportadora_input_id": row[17],
             "transportadora_ul_id": row[18],
-            "btn_incluir_item_nf_pedido": row[19]
-        })
+            "btn_incluir_item_nf_pedido": row[19],
             "transportadora": row[14],
             "transportadora_data_label": row[15],
             "transportadora_input_id": row[16],
@@ -194,7 +195,8 @@ def query_romaneio_data_op_302(routine_dict: dict, cursor: sqlite3.Cursor, conn:
     result_dict = {
         "url": routine_dict['url'],
         "login": login,
-        "romaneio": romaneio
+        "romaneio": romaneio,
+        "operacao": routine_dict['operacao']
     }
     return result_dict
 

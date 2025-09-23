@@ -12,24 +12,24 @@ def main(data, romaneio):
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False)
         page = browser.new_page()
+        print(f"romaneio: {romaneio['romaneio'][0]}")
+        input(f"debug")
+
         login_to_site(data[0]['url'], data[0]['login']['username'], data[0]['login']['password'], data[0]['login']['username_id'], data[0]['login']['password_id'], page)
-        
         start_new_romaneio(data[0]['url'], data[0]['login']['username'], data[0]['login']['password'], data[0]['login']['username_id'], data[0]['login']['password_id'], page, data[0]['operacao'])
         match (data[0]['operacao']):
             case '700 - Entrada Spot':
-                criar_romaneio_700(page, romaneio)
+                criar_romaneio_700(page, romaneio['romaneio'][0])
             case '001 - VENDAS':
-                criar_romaneio_405(page, romaneio)
+                criar_romaneio_405(page, romaneio['romaneio'][0])
             case _:
                 raise ValueError(f"Operação {data[0]['operacao']} não suportada")
         browser.close()
 
 def run_test(num_threads: int):
     threads = []
-    data = load_json_from_db(1, [2])
-    print(data)
-    input("debug")
-    for romaneio in data[0]['romaneio']:
+    data = load_json_from_db(1, [1])
+    for romaneio in data:
         thread = threading.Thread(
             target=main,
             args=(data, romaneio)
