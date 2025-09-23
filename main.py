@@ -12,9 +12,6 @@ def main(data, romaneio):
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False)
         page = browser.new_page()
-        print(f"romaneio: {romaneio['romaneio'][0]}")
-        input(f"debug")
-
         login_to_site(data[0]['url'], data[0]['login']['username'], data[0]['login']['password'], data[0]['login']['username_id'], data[0]['login']['password_id'], page)
         start_new_romaneio(data[0]['url'], data[0]['login']['username'], data[0]['login']['password'], data[0]['login']['username_id'], data[0]['login']['password_id'], page, data[0]['operacao'])
         match (data[0]['operacao']):
@@ -28,7 +25,7 @@ def main(data, romaneio):
 
 def run_test(num_threads: int):
     threads = []
-    data = load_json_from_db(1, [1])
+    data = load_json_from_db(1, [2])
     for romaneio in data:
         thread = threading.Thread(
             target=main,
@@ -41,6 +38,5 @@ def run_test(num_threads: int):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--threads', type=int, default=3, help='Number of threads to run')
     args = parser.parse_args()
     run_test(args.threads)

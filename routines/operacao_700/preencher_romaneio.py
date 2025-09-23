@@ -18,8 +18,9 @@ def criar_romaneio(page: Page, romaneio: dict):
     click_element_by_id(romaneio['depositante_copy_id'], page) # copiar deposittante
     wait_for_page_load(page)
     wait_for_page_load(page)
-    click_element_by_id(romaneio['btn_salvar_id'], page)  # salvar
-    input(f'debug pos salvar')
+    with page.expect_navigation():
+        click_element_by_id(romaneio['btn_salvar_id'], page)
+        
     end_time = time.time()
     print(f"Duração criar_romaneio: {end_time - start_time:.2f} seconds")
 
@@ -38,10 +39,6 @@ def set_parceiro(page: Page, romaneio: dict):
 def set_safra(page: Page, romaneio: dict):
     start_time = time.time()
     print('Preenchendo safra')
-    print(f"romaneio: {romaneio}")
-    print(f"safra_input_id: {romaneio['safra_input_id']}")
-    print(f"safra_data_label: {romaneio['safra_data_label']}")
-    input(f"debug")
     type_input_by_id(romaneio['safra_input_id'], str(romaneio['safra']), page)
     click_first_row_by_table_label(romaneio['safra_data_label'], page)
     end_time = time.time()
