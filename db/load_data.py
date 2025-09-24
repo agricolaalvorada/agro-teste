@@ -13,42 +13,41 @@ def load_json_from_path(json_path: str) -> dict:
         return json.load(f)
     
 
-def load_json_from_db(login_id: int, routine_ids: list[int]) -> dict:
+def load_json_from_db(routine_ids: list[int]) -> dict:
     
     conn = sqlite3.connect('./db/stress_db')  
     cursor = conn.cursor()
     data = []
     try:
         placeholders = ','.join(['?'] * len(routine_ids))
-        query = f"SELECT id, url, romaneio_data_id, operacao FROM playwright_routine WHERE id IN ({placeholders})"
+        query = f"SELECT pr.id, pr.url, pr.romaneio_data_id, pr.operacao, pr.login_id, ac.username, ac.password, ac.username_id, ac.password_id FROM playwright_routine pr join auth_credentials ac on pr.login_id = ac.id WHERE pr.id IN ({placeholders})"
         cursor.execute(query, routine_ids)
         routine_rows = cursor.fetchall()
         routine_dict = []
         for row in routine_rows:
-            id, url, romaneio_data_id, operacao = row
+            id, url, romaneio_data_id, operacao, login_id, username, password, username_id, password_id = row
             routine_dict.append({
                 "id": id,
                 "url": url,
                 "romaneio_data_id": romaneio_data_id,
-                "operacao": operacao
+                "operacao": operacao,
+                "login_id": {
+                    "username": username,
+                    "password": password,
+                    "username_id": username_id,
+                    "password_id": password_id
+                }
             })
 
-        cursor.execute("SELECT username, password, username_id, password_id FROM auth_credentials WHERE id in (?)", (login_id,))
-        login_rows = cursor.fetchone()
-        login = {
-                "username": login_rows[0],
-                "password": login_rows[1],
-                "username_id": login_rows[2],
-                "password_id": login_rows[3]
-            }
+        
         for routine in routine_dict:
 
             if routine['operacao'] == '700 - Entrada Spot': 
-                data.append(query_romaneio_data_op_700(routine, cursor, conn, login))
+                data.append(query_romaneio_data_op_700(routine, cursor, conn, routine['login_id']))
             elif routine['operacao'] == '001 - VENDAS':
-                data.append(query_romaneio_data_op_405(routine, cursor, conn, login))
+                data.append(query_romaneio_data_op_405(routine, cursor, conn, routine['login_id']))
             elif routine['operacao'] == '302 - EM - Compras p/ Pedido':
-                data.append(query_romaneio_data_op_302(routine, cursor, conn, login))
+                data.append(query_romaneio_data_op_302(routine, cursor, conn, routine['login_id']))
             else:
                 raise ValueError(f"Operação {routine['operacao']} não suportada")
         return data

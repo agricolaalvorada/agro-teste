@@ -7,7 +7,8 @@ def start_new_romaneio(url: str, username: str, password: str, username_id: str,
         navigate_to_page(f'{url}paginas/romaneio/inicial.jsf', page)
         romaneio_end = time.time()
         print(f"Carregar pagina romaneio: {romaneio_end - romaneio_start:.2f} seconds")
-        
+        print(operacao)
+        input(f'debug')
         click_element_by_id('tipo', page)
         select_and_click_li_from_ul('tipo_items', operacao, page)
         

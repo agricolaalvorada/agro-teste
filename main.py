@@ -23,9 +23,9 @@ def main(data, romaneio):
                 raise ValueError(f"Operação {data[0]['operacao']} não suportada")
         browser.close()
 
-def run_test(num_threads: int):
+def run_test():
     threads = []
-    data = load_json_from_db(1, [2])
+    data = load_json_from_db([3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28])
     for romaneio in data:
         thread = threading.Thread(
             target=main,
@@ -39,4 +39,4 @@ def run_test(num_threads: int):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     args = parser.parse_args()
-    run_test(args.threads)
+    run_test()

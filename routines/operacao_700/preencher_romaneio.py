@@ -18,9 +18,8 @@ def criar_romaneio(page: Page, romaneio: dict):
     click_element_by_id(romaneio['depositante_copy_id'], page) # copiar deposittante
     wait_for_page_load(page)
     wait_for_page_load(page)
-    with page.expect_navigation():
-        click_element_by_id(romaneio['btn_salvar_id'], page)
-        
+    click_element_by_id(romaneio['btn_salvar_id'], page)
+    wait_for_element_by_id(romaneio['tipo'], page)    
     end_time = time.time()
     print(f"Duração criar_romaneio: {end_time - start_time:.2f} seconds")
 
