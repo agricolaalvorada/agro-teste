@@ -7,9 +7,11 @@ import time
 import threading
 import argparse
 from db.load_data import load_json_from_db
+import random
 
 def main(data, romaneio):
     with sync_playwright() as p:
+        time.sleep(random.uniform(0, 10))
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
         login_to_site(data[0]['url'], data[0]['login']['username'], data[0]['login']['password'], data[0]['login']['username_id'], data[0]['login']['password_id'], page)
