@@ -1,7 +1,7 @@
 from playwright.sync_api import Page, Locator, Response
 
 def navigate_to_page(url: str, page: Page) -> Response:
-    return page.goto(url)
+    return page.goto(url, timeout=0)
 
 def locate_element_by_id(element_id, page: Page) -> Locator:
     return page.locator(f'#{element_id}')
@@ -19,7 +19,7 @@ def simulate_key_press(page: Page, key: str):
     page.keyboard.press(key)
 
 def wait_for_page_load(page: Page, timeout: int = 30000):
-    page.wait_for_load_state('load', timeout=timeout)
+    page.wait_for_load_state('load', timeout=0)
 
 
 def click_first_row_by_table_label(table_label: str, page: Page):

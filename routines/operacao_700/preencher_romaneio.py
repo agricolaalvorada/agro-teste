@@ -19,7 +19,9 @@ def criar_romaneio(page: Page, romaneio: dict):
     wait_for_page_load(page)
     wait_for_page_load(page)
     click_element_by_id(romaneio['btn_salvar_id'], page)
-    wait_for_element_by_id(romaneio['tipo'], page)    
+    # wait_for_element_by_id(romaneio['tipo'], page)
+    wait_for_page_load(page)
+    sleep(1)    
     end_time = time.time()
     print(f"Duração criar_romaneio: {end_time - start_time:.2f} seconds")
 
