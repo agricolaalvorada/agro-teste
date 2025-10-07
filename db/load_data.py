@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 import sqlite3
 from typing import Dict, Any
-from romaneio_data.load_romaneio_data import query_romaneio_data_op_700_by_id, query_romaneio_data_op_405_by_id, query_romaneio_data_op_302_by_id
+from db.romaneio_data.load_romaneio_data import query_romaneio_data_op_700_by_id, query_romaneio_data_op_405_by_id, query_romaneio_data_op_302_by_id
 
 def load_json_from_path(json_path: str) -> dict:
     path = Path(json_path)
@@ -159,4 +159,4 @@ def query_auth_credentials(auth_credentials_ids: list[int]) -> dict:
         })
     return auth_credentials
 
-print(load_data_from_db_by_user([1]))
+# print(load_data_from_db_by_user([1]))

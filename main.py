@@ -9,22 +9,8 @@ import argparse
 from db.load_data import load_data_from_db_by_user
 import random
 
-def main(data, romaneio):
-    with sync_playwright() as p:
-        time.sleep(random.uniform(0, 10))
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
-        login_to_site(data[0]['url'], data[0]['login']['username'], data[0]['login']['password'], data[0]['login']['username_id'], data[0]['login']['password_id'], page)
-        start_new_romaneio(data[0]['url'], data[0]['login']['username'], data[0]['login']['password'], data[0]['login']['username_id'], data[0]['login']['password_id'], page, data[0]['operacao'])
-        if data[0]['operacao'] == '700 - Entrada Spot':
-            criar_romaneio_700(page, romaneio['romaneio'][0])
-        elif data[0]['operacao'] == '001 - VENDAS':
-            criar_romaneio_405(page, romaneio['romaneio'][0])
-        else:
-            raise ValueError(f"Operação {data[0]['operacao']} não suportada")
-        browser.close()
 
-def alt(routine_romaneio_data: dict):
+def main(routine_romaneio_data: dict):
     with sync_playwright() as p:
         time.sleep(random.uniform(0, 10))
         browser = p.chromium.launch(headless=True)
@@ -43,10 +29,11 @@ def alt(routine_romaneio_data: dict):
 def run_test():
     threads = []
     data = load_data_from_db_by_user([1,2])
-    for user_data in data:
+    for routine_romaneio_data in data:
         thread = threading.Thread(
             target=main,
-            args=(user_data, user_data['romaneio_data'][0])
+            args=(routine_romaneio_data)
+
         )
         threads.append(thread)
         thread.start()    
