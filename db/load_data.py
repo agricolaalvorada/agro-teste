@@ -24,21 +24,29 @@ def load_json_from_db(routine_ids: list[int]) -> dict:
         cursor.execute(query, routine_ids)
         routine_rows = cursor.fetchall()
         routine_dict = []
+        checker = set()
+        unique_users = []
         for row in routine_rows:
             id, url, romaneio_data_id, operacao, login_id, username, password, username_id, password_id = row
-            routine_dict.append({
-                "id": id,
-                "url": url,
-                "romaneio_data_id": romaneio_data_id,
-                "operacao": operacao,
-                "login_id": {
+            user_data = {}
+            if username not in checker:
+                user_data = {
                     "username": username,
                     "password": password,
                     "username_id": username_id,
                     "password_id": password_id
                 }
+                checker.add(username)
+                unique_users.append(user_data)
+            routine_dict.append({
+                "id": id,
+                "url": url,
+                "romaneio_data_id": romaneio_data_id,
+                "operacao": operacao,
+                "login_id": next((user for user in unique_users if user["username"] == username), None)
             })
-
+        print(routine_dict)
+        input('Pressione enter para continuar')
         
         for routine in routine_dict:
 
@@ -103,7 +111,6 @@ def query_romaneio_data_op_700(routine_dict: dict, cursor: sqlite3.Cursor, conn:
         "romaneio": romaneio,
         "operacao": routine_dict['operacao']
     }
-
     return result_dict
 
 
@@ -199,4 +206,79 @@ def query_romaneio_data_op_302(routine_dict: dict, cursor: sqlite3.Cursor, conn:
     }
     return result_dict
 
-#print(load_json_from_db(1, [1,2]))
+
+def load_data_from_db_by_user(routine_ids: list[int]) -> dict:
+
+    routine_romaneio_data = query_routine_romaneio_data(routine_ids)
+    # romaneio_data = query_romaneio_data([row['romaneio_data_id'] for row in routine_romaneio_data])
+    playwright_routine_user = query_playwright_routine_user([row['playwright_routine_user_id'] for row in routine_romaneio_data])
+    
+    return routine_romaneio_data
+
+
+
+def query_routine_romaneio_data(routine_ids: list[int]) -> dict:
+    conn = sqlite3.connect('./db/stress_db')
+    cursor = conn.cursor()
+    query = """
+        SELECT playwright_routine_user_id, romaneio_data_id FROM routine_romaneio_data WHERE playwright_routine_user_id IN ({placeholders})
+    """
+    placeholders = ','.join(['?'] * len(routine_ids))
+    cursor.execute(query.format(placeholders=placeholders), routine_ids)
+    routine_romaneio_data_rows = cursor.fetchall()
+    routine_romaneio_data = []
+    checker = set()
+    unique_users = []
+    for row in routine_romaneio_data_rows:
+        playwright_routine_user_id, romaneio_data_id = row
+
+        playwright_routine_user = query_playwright_routine_user([playwright_routine_user_id])[0]
+        romaneio_data = query_romaneio_data([romaneio_data_id])
+        if playwright_routine_user_id not in checker:
+            checker.add(playwright_routine_user_id)
+            unique_users.append(playwright_routine_user_id)
+            routine_romaneio_data.append({
+                "playwright_routine_user_id": playwright_routine_user_id,
+                "romaneio_data": romaneio_data,
+                "playwright_routine_user": playwright_routine_user
+            })
+        else:
+            idx = next((i for i, d in enumerate(routine_romaneio_data) if d["playwright_routine_user_id"] == playwright_routine_user_id), None)
+            
+            routine_romaneio_data[idx]['romaneio_data'].append(romaneio_data)
+
+    return routine_romaneio_data
+
+def query_romaneio_data(romaneio_data_ids: list[int]) -> dict:
+    conn = sqlite3.connect('./db/stress_db')
+    cursor = conn.cursor()
+    query = """
+        SELECT * FROM romaneio_data WHERE id IN ({placeholders})
+    """
+    placeholders = ','.join(['?'] * len(romaneio_data_ids))
+    cursor.execute(query.format(placeholders=placeholders), romaneio_data_ids)
+    romaneio_data_rows = cursor.fetchall()
+    romaneio_data = []
+    for row in romaneio_data_rows:
+        romaneio_data.append(row)
+    return romaneio_data
+
+def query_playwright_routine_user(playwright_routine_user_ids: list[int]) -> dict:
+    conn = sqlite3.connect('./db/stress_db')
+    cursor = conn.cursor()
+    query = """
+        SELECT url, login_id, operacao FROM playwright_routine_user WHERE id IN ({placeholders})
+    """
+    placeholders = ','.join(['?'] * len(playwright_routine_user_ids))
+    cursor.execute(query.format(placeholders=placeholders), playwright_routine_user_ids)
+    playwright_routine_user_rows = cursor.fetchall()
+    playwright_routine_user = []
+    for row in playwright_routine_user_rows:
+        playwright_routine_user.append({
+            "url": row[0],
+            "login_id": row[1],
+            "operacao": row[2]
+        })
+    return playwright_routine_user
+
+print(load_data_from_db_by_user([1, 2]))

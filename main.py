@@ -26,7 +26,7 @@ def main(data, romaneio):
 
 def run_test():
     threads = []
-    data = load_json_from_db([3, 4,5,6,7,8,9,10,11, 12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28]) #
+    data = load_json_from_db([9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]) #
     for romaneio in data:
         thread = threading.Thread(
             target=main,
@@ -36,6 +36,7 @@ def run_test():
         thread.start()    
     for thread in threads:
         thread.join()
+        input('Pressione enter para confirmar o fim do teste')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
