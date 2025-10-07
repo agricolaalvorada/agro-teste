@@ -159,4 +159,4 @@ def query_auth_credentials(auth_credentials_ids: list[int]) -> dict:
         })
     return auth_credentials
 
-print(load_data_from_db_by_user([1, 2]))
+print(load_data_from_db_by_user([1]))
