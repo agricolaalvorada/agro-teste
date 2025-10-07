@@ -32,7 +32,7 @@ def run_test():
     for routine_romaneio_data in data:
         thread = threading.Thread(
             target=main,
-            args=(routine_romaneio_data)
+            args=(routine_romaneio_data,)
 
         )
         threads.append(thread)
