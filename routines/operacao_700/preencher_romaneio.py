@@ -1,6 +1,7 @@
 from utils.page_utils import *
 from playwright.sync_api import Page
 import time
+from db.save_telemetry import save_telemetry
 
 
 
@@ -20,8 +21,10 @@ def criar_romaneio(page: Page, romaneio: dict):
     wait_for_page_load(page)
     click_element_by_id(romaneio['btn_salvar_id'], page)
     wait_for_page_load(page)
-    time.sleep(1)
+    wait_for_element_by_id('msg_container', page)
+
     end_time = time.time()
+    save_telemetry('criar_romaneio', romaneio['veiculo'], romaneio['run_identifier'], end_time - start_time)
     print(f"Duração criar_romaneio: {end_time - start_time:.2f} seconds")
     
 

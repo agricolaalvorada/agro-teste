@@ -5,6 +5,7 @@ import time
 def start_new_romaneio(url: str, username: str, password: str, username_id: str, password_id: str, page: Page, operacao: str):        
         romaneio_start = time.time()
         navigate_to_page(f'{url}paginas/romaneio/inicial.jsf', page)
+        wait_for_page_load(page)
         romaneio_end = time.time()
         print(f"Carregar pagina romaneio: {romaneio_end - romaneio_start:.2f} seconds")
         click_element_by_id('tipo', page)

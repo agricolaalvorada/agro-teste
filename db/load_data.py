@@ -91,13 +91,13 @@ def query_routine_romaneio_data(routine_ids: list[int]) -> dict:
         playwright_routine_user_id, romaneio_data_id = row
 
         playwright_routine_user = query_playwright_routine_user([playwright_routine_user_id])[0]
-        romaneio_data = [query_romaneio_data(romaneio_data_id, playwright_routine_user['operacao'])]
+        romaneio_data = query_romaneio_data(romaneio_data_id, playwright_routine_user['operacao'])
         if playwright_routine_user_id not in checker:
             checker.add(playwright_routine_user_id)
             unique_users.append(playwright_routine_user_id)
             routine_romaneio_data.append({
                 "playwright_routine_user_id": playwright_routine_user_id,
-                "romaneio_data": romaneio_data,
+                "romaneio_data": [romaneio_data],
                 "playwright_routine_user": playwright_routine_user
             })
         else:
