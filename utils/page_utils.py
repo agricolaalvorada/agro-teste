@@ -1,4 +1,5 @@
 from playwright.sync_api import Page, Locator, Response
+import time
 
 def navigate_to_page(url: str, page: Page) -> Response:
     return page.goto(url, timeout=0)
@@ -51,7 +52,7 @@ def click_element_by_id(element_id: str, page: Page):
 
 def click_element_by_xpath(xpath: str, page: Page):
     element = locate_element_by_xpath(xpath, page)
-    element.click()
+    element.click(force=True)
 
 def select_and_click_li_from_ul(ul_id: str, li_text: str, page: Page):
     ul_element = locate_element_by_id(ul_id, page)
@@ -63,3 +64,17 @@ def fill_input_after_labels(label1_text: str, label2_text: str, content: str, pa
     label2 = page.locator(f'label:has-text("{label2_text}")')
     input_element = page.locator(f'input:right-of(:has-text("{label1_text}")):right-of(:has-text("{label2_text}"))')
     input_element.fill(content)
+
+def wait_for_paginator_text(page, expected_text, timeout=30, container_id=None):
+    if container_id:
+        selector = f'div#{container_id} span.ui-paginator-current'
+    else:
+        selector = 'span.ui-paginator-current'
+    locator = page.locator(selector)
+    t0 = time.time()
+    while time.time() - t0 < timeout:
+        current_text = locator.inner_text().strip()
+        if current_text == expected_text:
+            return True
+        time.sleep(0.2)
+    raise TimeoutError(f"'{selector}' did not reach text: {expected_text}")
