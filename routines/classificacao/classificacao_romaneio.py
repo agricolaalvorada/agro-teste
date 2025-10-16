@@ -22,10 +22,9 @@ def set_classificacao(page: Page):
     page.screenshot(path="debug_after_render_classificacao.png")
     fill_classificacao_indice_outros(page, [14.5, 0.5, 3, 4.5, 1.5, 1, 1, 1])
 
-    # dtTableIdClass:11:indiceComboBox
     xpath = '//div[@id="dtTableIdClass:11:indiceComboBox"]'
     click_element_by_xpath(xpath, page)
-    select_and_click_li_from_ul('//div[@id="dtTableIdClass:11:indiceComboBox_items"]', '0 a 3 Sementes', page)
+    click_element_by_xpath('//li[@id="dtTableIdClass:11:indiceComboBox_1"]', page)
     end_time = time.time()
     print(f"Duração set_classificacao: {end_time - start_time:.2f} seconds")
 
@@ -37,3 +36,11 @@ def fill_classificacao_indice_outros(page: Page, values):
     for i in range(count):
         inputs.nth(i).fill(str(values[i]))
         inputs.nth(i).evaluate("el => el.blur()")
+
+
+def select_combo_item(page, combo_id, item_text):
+    trigger = page.locator(f'#{combo_id.replace(":", "\\:")}')
+    trigger.click()
+    ul = page.locator(f'#{combo_id.replace(":", "\\:")}_items')
+    ul.wait_for(state='visible', timeout=5000)
+    ul.locator('li', has_text=item_text).click()
