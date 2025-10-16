@@ -2,6 +2,7 @@ from utils.page_utils import fill_input_by_id, navigate_to_page, fill_login_fiel
 from playwright.sync_api import Page
 from utils.page_utils import click_element_by_xpath, wait_for_paginator_text
 import time
+import playwright.sync_api
 
 def start_new_romaneio(url: str, username: str, password: str, username_id: str, password_id: str, page: Page, operacao: str):        
         romaneio_start = time.time()
@@ -26,18 +27,12 @@ def edit_romaneio(url: str, username: str, password: str, username_id: str, pass
         fill_input_by_id('numeroR', numero_romaneio, page)
         click_element_by_id('btnPesquisar', page)
         wait_for_page_load(page)
-        page.screenshot(path="debug_after_search.png")
+        # page.screenshot(path="debug_after_search.png")
         wait_for_paginator_text(page, "Mostrando 1 - 1 de 1", container_id="dtConsulta_paginator_bottom")
         xpath = '//a[@id="dtConsulta:0:j_idt315"]'
-        page.screenshot(path="debug_before_click.png")
-        element = page.locator('//a[@id="dtConsulta:0:j_idt315"]')
-        print("Playwright is_visible:", element.is_visible())
-        print("Playwright is_enabled:", element.is_enabled())
-        print("Bounding box:", element.bounding_box())
-        print("Computed style (display/visibility):",
-        page.evaluate('el => [getComputedStyle(el).display, getComputedStyle(el).visibility, el.offsetParent !== null]', element))
-        page.wait_for_selector(xpath, state='visible', timeout=5000)
-        click_element_by_xpath(xpath, page)
+        bounding_box = page.locator(xpath).bounding_box()
+        page.mouse.click(bounding_box['x'] + bounding_box['width'] / 2, bounding_box['y'] + bounding_box['height'] / 2)
+        #click_element_by_xpath(xpath, page)
 
 
 def login_to_site(url: str, username: str, password: str, username_id: str, password_id: str, page: Page):
