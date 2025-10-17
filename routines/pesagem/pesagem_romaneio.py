@@ -30,6 +30,7 @@ def pesagem_romaneio(page: Page):
     page.locator('xpath=//*[@id="j_idt27848:j_idt27852"]').click()
     # set_transgenia(page)
     end_time = time.time()
+    save_telemetry('pesagem', '', '', int((end_time - start_time) * 1000))
     print(f"Duração pesagem_romaneio: {end_time - start_time:.2f} seconds")
 
 

@@ -11,6 +11,7 @@ def classificacao_romaneio(page: Page):
     page.wait_for_selector("#origemClass", state="visible", timeout=10000)
     set_classificacao(page)
     end_time = time.time()
+    save_telemetry('classificacao', '', '', int((end_time - start_time) * 1000))
     print(f"Duração classificacao_romaneio: {end_time - start_time:.2f} seconds")
 
 def set_classificacao(page: Page):

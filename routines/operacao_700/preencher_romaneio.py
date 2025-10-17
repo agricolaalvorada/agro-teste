@@ -26,7 +26,7 @@ def criar_romaneio(page: Page, romaneio: dict):
     element = locate_element_by_id('msg_container', page)
     inner_html = element.inner_html()
     end_time = time.time()
-    #save_telemetry('criar_romaneio', romaneio['veiculo'], romaneio['run_identifier'], end_time - start_time)
+    save_telemetry('operacao_700', romaneio.get('veiculo', ''), romaneio.get('run_identifier', ''), int((end_time - start_time) * 1000))
     print(f"Duração criar_romaneio: {end_time - start_time:.2f} seconds")
     return get_numero_romaneio(inner_html)
 
