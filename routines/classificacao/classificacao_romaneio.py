@@ -8,7 +8,6 @@ def classificacao_romaneio(page: Page):
     print('Classificando romaneio')
     click_element_by_xpath('//a[@href="#abaClassificacao"]', page)
     wait_for_page_load(page)
-    page.screenshot(path="debug_initial_classificacao.png")
     page.wait_for_selector("#origemClass", state="visible", timeout=10000)
     set_classificacao(page)
     end_time = time.time()
@@ -17,30 +16,36 @@ def classificacao_romaneio(page: Page):
 def set_classificacao(page: Page):
     start_time = time.time()
     print('Preenchendo classificacao')
-    page.screenshot(path="debug_before_classificacao.png")
     page.wait_for_selector('//input[@id="dtTableIdClass:0:indiceOutros"]', state="visible")
-    page.screenshot(path="debug_after_render_classificacao.png")
-    fill_classificacao_indice_outros(page, [14.5, 0.5, 3, 4.5, 1.5, 1, 1, 1])
-
+    fill_classificacao_indice_outros(page)
     xpath = '//div[@id="dtTableIdClass:11:indiceComboBox"]'
     click_element_by_xpath(xpath, page)
     click_element_by_xpath('//li[@id="dtTableIdClass:11:indiceComboBox_1"]', page)
+    page.wait_for_function(
+        "selector => document.querySelector(selector)?.value === '0'",
+        arg='#dtTableIdClass\\:11\\:desconto'
+    )
+    wait_for_page_load(page)
+#    click_element_by_id('transgenia_classificacao', page)
+#    click_element_by_id('transgenia_classificacao_1', page)
+    wait_for_page_load(page)
+    click_element_by_id('j_idt27349', page) # salvar
+    wait_for_page_load(page)
+    page.wait_for_selector('div#modalPersisteClassificacaoDesconto', state='visible')
+    page.get_by_role("button", name="Sim").click()
+    wait_for_page_load(page)
+    page.wait_for_selector('.ui-growl-item', state='visible')
     end_time = time.time()
     print(f"Duração set_classificacao: {end_time - start_time:.2f} seconds")
 
-def fill_classificacao_indice_outros(page: Page, values):
-    inputs = page.locator('tbody#dtTableIdClass_data input[id$=":indiceOutros"]:not([disabled])')
-    count = inputs.count()
-    if len(values) != count:
-        raise ValueError(f"Length of values ({len(values)}) does not match number of enabled fields ({count})")
-    for i in range(count):
-        inputs.nth(i).fill(str(values[i]))
-        inputs.nth(i).evaluate("el => el.blur()")
-
-
-def select_combo_item(page, combo_id, item_text):
-    trigger = page.locator(f'#{combo_id.replace(":", "\\:")}')
-    trigger.click()
-    ul = page.locator(f'#{combo_id.replace(":", "\\:")}_items')
-    ul.wait_for(state='visible', timeout=5000)
-    ul.locator('li', has_text=item_text).click()
+def fill_classificacao_indice_outros(page: Page):
+    indexes = [0, 1, 2, 3, 5, 6, 9, 10]
+    for index in indexes:
+        current_value = page.locator(f'//input[@id="dtTableIdClass:{index}:indiceOutros"]').input_value()
+        if current_value in ("", "0", "0.0", "0,0"):
+            fill_input_by_xpath(f'//input[@id="dtTableIdClass:{index}:indiceOutros"]', '1,5', page)
+#    input('PRESS ENTER')
+#    page.wait_for_function(
+#    "selector => document.querySelector(selector)?.value === '0'",
+#    arg='#dtTableIdClass\\:0\\:desconto'
+#    )

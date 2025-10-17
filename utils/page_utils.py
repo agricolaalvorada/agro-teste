@@ -10,6 +10,9 @@ def locate_element_by_id(element_id, page: Page) -> Locator:
 def fill_input_by_id(element_id: str, content: str, page: Page):
     page.fill(f'#{element_id}', content)
 
+def fill_input_by_xpath(element_id: str, content: str, page: Page):
+    page.fill(element_id, content)
+
 def type_input_by_id(element_id: str, content: str, page: Page):
     page.type(f'#{element_id}', content)
 
