@@ -22,6 +22,7 @@ def pesagem_romaneio(page: Page):
         "selector => document.querySelector(selector)?.value === '100'",
         arg="#j_idt26886"
     )
+    input('Pressione Enter para continuar')
     click_element_by_id('j_idt27349', page) # salvar
     page.wait_for_selector('#idModalImpressaoPesagem', state='visible')
     page.locator('xpath=//*[@id="j_idt27848:j_idt27852"]').click()
