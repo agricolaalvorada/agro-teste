@@ -9,7 +9,9 @@ def pesagem_romaneio(page: Page):
     print('Pesando romaneio')
     acessar_classificacao(page)
     page.click(f'a[href="#abaPesagem"]')
-    wait_for_page_load(page)
+    page.wait_for_function(
+        "document.querySelector('#transgenia_pesagem_label') && document.querySelector('#transgenia_pesagem_label').textContent.trim() === '01 - Intacta'"
+    )
     fill_input_by_id('j_idt26875', '101', page)
     page.locator('#j_idt26875').evaluate("el => el.blur()")
     page.wait_for_function(

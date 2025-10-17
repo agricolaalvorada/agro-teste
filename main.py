@@ -49,7 +49,7 @@ def main(routine_romaneio_data: dict):
         # save_telemetry('login_to_site', routine_romaneio_data['playwright_routine_user']['login']['username'], routine_romaneio_data['playwright_routine_user']['run_identifier'], telemetry_end - telemetry_start)
 def run_test():
     threads = []
-    data = load_data_from_db_by_user([1])
+    data = load_data_from_db_by_user([1, 2])
     for routine_romaneio_data in data:
         thread = threading.Thread(
             target=main,

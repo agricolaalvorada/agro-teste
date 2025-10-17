@@ -2,7 +2,7 @@
 
 ## Descrição
 
-Este projeto automatiza o processo de preenchimento e envio de romaneios utilizando o Playwright para automação de navegador. Ele suporta múltiplos tipos de operação (ex: 700 - Entrada Spot, 001 - VENDAS) e pode rodar múltiplas threads para testes de estresse e medição de performance. O projeto foi desenvolvido para automação robusta, repetível e baseada em dados.
+Este projeto automatiza o processo de preenchimento e envio de romaneios utilizando o Playwright para automação de navegador. Ele suporta múltiplos tipos de operação (ex: 700 - Entrada Spot, 001 - VENDAS), executa tarefas automatizadas a partir de dados, e pode rodar múltiplas threads para testes de estresse e medição de performance. Conta ainda com uma API para ingestão de telemetria.
 
 ## Funcionalidades
 
@@ -12,14 +12,15 @@ Este projeto automatiza o processo de preenchimento e envio de romaneios utiliza
 - Execução multi-thread para testes de estresse
 - Rotinas modulares para cada tipo de operação
 - Telemetria e registro de duração de cada etapa
+- API FastAPI para telemetria (exporter/)
 
 ## Estrutura do Projeto
 
-- `main.py` — Ponto de entrada, gerencia threads e seleção de rotinas
-- `db/` — Contém arquivos de dados, banco de dados e scripts de carregamento
-- `repository/` — Utilitários de conexão com banco de dados
-- `routines/` — Rotinas de automação para cada tipo de operação
-- `utils/` — Funções utilitárias para Playwright e interação com páginas
+- `main.py` — Ponto de entrada. Gerencia execução por threads e seleção de rotinas
+- `db/` — Arquivos de dados, scripts de carregamento, rotina de telemetria, banco SQLite
+- `exporter/` — API FastAPI para recebimento de telemetria
+- `routines/` — Rotinas de automação moduladas por operação (ex: operacao_700, pesagem, classificacao)
+- `utils/` — Funções utilitárias para Playwright e manipulação de páginas
 
 ## Instalação
 
@@ -35,55 +36,60 @@ Este projeto automatiza o processo de preenchimento e envio de romaneios utiliza
    ```
 3. **Instale as dependências:**
    ```bash
-   pip install playwright
    pip install -r requirements.txt
-   playwright install  # Instala os navegadores
+   pip install fastapi uvicorn
+   playwright install  # instala os navegadores suportados
    ```
 
 ## Uso
 
 1. **Prepare seus dados:**
-   - Fazer um selecct no banco de dados selecionando:
-        - 1 parceiro
-        - 1 motorista
-        - N placas e seu reboque 1
-        - Inspecione o elemento das operacoes e obtenha:
-            - btn_salvar_id = id do elemento do botao salvar
-            - btn_incluir_item_nf_pedido = id do elemento do botao de incluir item
-            - parceiro_input_id = id do campo de parceiro
-            - parceiro_ul_id = id da tabela de autocomplete
-            - transportadora_input_id = id do campo de preenchimento da transportadora
-            - transportadora_ul_id = id da tabela de autocomplete do campo transportadora
-        - Crie inserts na romaneio_data, substituindo com os valores desejados acima
+   - Edite ou carregue dados no banco SQLite (`db/stress_db`) e/ou nos arquivos `.json` em `db/romaneio_data/` conforme a operação desejada.
+   - as tabelas utilizadas são: playwright_routine_user, romaneio_data (para os dados do romaneio), routine_romaneio_data (relaciona dados de um romaneio a uma rotina do playwright a ser executada)
+   - Certifique-se de registrar parceiros, motoristas, placas, IDs de campos a serem usados conforme a rotina necessária.
+   - Veja exemplos de campos e estrutura em `db/routine.json` e arquivos no diretório de dados.
 
-
-    Sendo N o numero de romaneios que voce deseja criar
 2. **Execute a automação:**
    ```bash
    python main.py
    ```
+   Isso irá disparar a automação de acordo com os dados e rotina configurados.
 
-## Exemplo
+3. **(Opcional) Execute a API de telemetria:**
+   ```bash
+   cd exporter
+   uvicorn api:app --host 0.0.0.0 --port 8089
+   ```
+   - Acesse `GET /healthcheck` para ver se a API está viva.
+   - Use `POST /telemetry` para enviar dados de telemetria.
 
-```python
-python main.py
-```
+## Extensão de Operações
+
+- Para adicionar um novo tipo de operação, basta criar novo script Python dentro de `routines/operacao_<codigo>/` ou uma função dedicada no diretório apropriado, seguindo o modelo das rotinas existentes.
+- Para novas rotinas de pesagem ou classificação, consulte `routines/pesagem/` e `routines/classificacao/` respectivamente.
 
 ## Configuração
 
 - **Dados de operação e login:**
   - SQLite: `db/stress_db`
+  - JSON: arquivos em `db/romaneio_data/`
 - **Operações suportadas:**
   - 700 - Entrada Spot
   - 001 - VENDAS
   - 302 - COMPRA
-  - (Extensível via adicao de routines/operacao_xxx/)
+  - (Extensível via adição de rotinas no diretório routines/)
 
 ## Dependências
 
 - Python 3.8+
 - [Playwright para Python](https://playwright.dev/python/)
+- FastAPI e Uvicorn (recomendado para API)
 - sqlite3 (biblioteca padrão)
+
+Para instalar manualmente, use:
+```bash
+pip install playwright fastapi uvicorn
+```
 
 ## Licença
 
@@ -91,5 +97,5 @@ Este projeto está licenciado sob a Licença MIT.
 
 ## Roadmap
 
-- [ ] Adicionar um endpoint (API) que receba os dados descritos na seção "Prepare seus dados" e realize inserts no banco de dados.
-- [ ] Implementar persistência de métricas de execução utilizando o módulo `save_telemetry.py`.
+- [ ] Adicionar endpoint/api de ingestão de dados diretamente pelo usuário (atualizar rotina de inserts)
+- [ ] Implementar persistência de métricas de execução utilizando `save_telemetry.py` via API ou arquivo
