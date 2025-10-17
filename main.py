@@ -33,15 +33,16 @@ def main(routine_romaneio_data: dict):
                 list_romaneios.append(criar_romaneio_405(page, romaneio_data))
             else:
                 raise ValueError(f"Operação {routine_romaneio_data['playwright_routine_user']['operacao']} não suportada")
+        for numero_romaneio in list_romaneios:
+            edit_romaneio(routine_romaneio_data['playwright_routine_user']['url'], routine_romaneio_data['playwright_routine_user']['login']['username'], routine_romaneio_data['playwright_routine_user']['login']['password'], routine_romaneio_data['playwright_routine_user']['login']['username_id'], routine_romaneio_data['playwright_routine_user']['login']['password_id'], page, numero_romaneio)
+            classificacao_romaneio(page)
         
         for numero_romaneio in list_romaneios:
             edit_romaneio(routine_romaneio_data['playwright_routine_user']['url'], routine_romaneio_data['playwright_routine_user']['login']['username'], routine_romaneio_data['playwright_routine_user']['login']['password'], routine_romaneio_data['playwright_routine_user']['login']['username_id'], routine_romaneio_data['playwright_routine_user']['login']['password_id'], page, numero_romaneio)
             pesagem_romaneio(page)
             
         
-        for numero_romaneio in list_romaneios:
-            edit_romaneio(routine_romaneio_data['playwright_routine_user']['url'], routine_romaneio_data['playwright_routine_user']['login']['username'], routine_romaneio_data['playwright_routine_user']['login']['password'], routine_romaneio_data['playwright_routine_user']['login']['username_id'], routine_romaneio_data['playwright_routine_user']['login']['password_id'], page, numero_romaneio)
-            classificacao_romaneio(page)
+
 
         browser.close()
         telemetry_end = time.time()
