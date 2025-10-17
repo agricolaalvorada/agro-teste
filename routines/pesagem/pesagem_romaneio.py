@@ -10,12 +10,14 @@ def pesagem_romaneio(page: Page):
     page.click(f'a[href="#abaPesagem"]')
     wait_for_page_load(page)
     fill_input_by_id('j_idt26875', '101', page)
+    page.locator('#j_idt26875').evaluate("el => el.blur()")
     page.wait_for_function(
         "selector => document.querySelector(selector)?.value === '101'",
         arg="#j_idt26886"
     )
+
     fill_input_by_id('txtPesoFinal', '1', page)
-    page.locator('#j_idt26875').evaluate("el => el.blur()")
+    page.locator('#txtPesoFinal').evaluate("el => el.blur()")
     page.wait_for_function(
         "selector => document.querySelector(selector)?.value === '100'",
         arg="#j_idt26886"
