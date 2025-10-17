@@ -23,21 +23,8 @@ def pesagem_romaneio(page: Page):
         arg="#j_idt26886"
     )
     click_element_by_id('j_idt27349', page) # salvar
-    page.wait_for_selector('.ui-growl-item', state='visible')
+    page.wait_for_selector('#idModalImpressaoPesagem', state='visible')
+    page.locator('xpath=//*[@id="j_idt27848:j_idt27852"]').click()
     # set_transgenia(page)
     end_time = time.time()
     print(f"Duração pesagem_romaneio: {end_time - start_time:.2f} seconds")
-
-# def pesagem_completa_romaneio(page: Page):
-#     start_time = time.time()
-#     print('Pesando romaneio completo')
-#     page.click(f'a[href="#abaPesagem"]')
-#     wait_for_page_load(page)
-# 
-#     page.locator('#j_idt26875').evaluate("el => el.value = '101'")
-#     page.locator('#txtPesoFinal').evaluate("el => el.value = '1'")
-#     wait_for_page_load(page)
-#     end_time = time.time()
-#     click_element_by_id('j_idt27349', page) # salvar
-#     page.wait_for_selector('.ui-growl-item', state='visible')
-#     print(f"Duração pesagem_completa_romaneio: {end_time - start_time:.2f} seconds")
