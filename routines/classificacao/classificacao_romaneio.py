@@ -26,9 +26,10 @@ def set_classificacao(page: Page):
         arg='#dtTableIdClass\\:11\\:desconto'
     )
     wait_for_page_load(page)
-#    click_element_by_id('transgenia_classificacao', page)
-#    click_element_by_id('transgenia_classificacao_1', page)
+    click_element_by_id('transgenia_classificacao', page)
+    click_element_by_id('transgenia_classificacao_1', page)
     wait_for_page_load(page)
+    
     click_element_by_id('j_idt27349', page) # salvar
     wait_for_page_load(page)
     page.wait_for_selector('div#modalPersisteClassificacaoDesconto', state='visible')
